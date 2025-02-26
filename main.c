@@ -4,9 +4,9 @@
 
 bool game_over = false, game_over_1 = false;
 int x = 0;
-char * marker = "X", cpumarker = "O";
+char[1] marker = "X", cpumarker = "O";
 int allowed[] = {1, 2, 3};
-char * grid[3][3] = { {".", ".", "."}, {".", ".", "."}, {".", ".", "."} };
+char grid[3][3] = { {".", ".", "."}, {".", ".", "."}, {".", ".", "."} };
 
 void player_move() {
     int x_coord, y_coord;
@@ -61,7 +61,7 @@ void print_table() {
     }
 }
 
-bool check(char * mark) {
+bool check(char mark) {
     int i;
     if ((grid[0][0] == mark && grid[1][1] == mark && grid[2][2] == mark) || (grid[0][2] == mark && grid[1][1] == mark && grid[2][0] == mark)) {
         return true;
@@ -85,7 +85,7 @@ char choose() {
         if (marker == "X" || marker == "O") {
             return marker;
         }
-        print("try again; \n");
+        printf("try again; \n");
     }
 }
 
@@ -137,7 +137,7 @@ bool play_turn() {
 
 void print_result() {
     if (game_over == true) {
-        print("%c won!", marker);
+        printf("%c won!", marker);
         return;
     }
     printf("Draw :( \n");
@@ -156,7 +156,7 @@ void play_game() {
 }
 
  int main() {
-    char * input = "n";
+    char input = "n";
     while (1) {
         play_game();
         print_result();
