@@ -56,7 +56,7 @@ bool check(char mark) {
             return true;
         }
     }
-    for (i = 0, i < 3; i++;) {
+    for (i = 0; i < 3; i++) {
         if (grid[0][i] == mark && grid[1][i] == mark && grid[2][i] == mark) {
             return true;
         }
@@ -67,7 +67,7 @@ bool check(char mark) {
 char choose() {
     while (1) {
         printf("choose a character: ");
-        scanf("%c", &marker);
+        scanf(" %c", &marker);
         marker = toupper(marker);
         if (marker == 'X' || marker == 'O') {
             system("clear");
