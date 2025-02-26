@@ -152,7 +152,7 @@ int main() {
         play_game();
         print_result();
         printf("Do you want to play another game? [y/N] ");
-        scanf("%c", &input);
+        scanf(" %c", &input);
         if (input != 'y') {
             break;
         }
