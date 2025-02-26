@@ -1,61 +1,46 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 bool game_over = false, game_over_1 = false;
 int x = 0;
-char[1] marker = "X", cpumarker = "O";
+char marker = 'X';
+char cpumarker = 'O';
 int allowed[] = {1, 2, 3};
-char grid[3][3] = { {".", ".", "."}, {".", ".", "."}, {".", ".", "."} };
+char grid[3][3] = { {'.', '.', '.'}, {'.', '.', '.'}, {'.', '.', '.'} };
 
 void player_move() {
-    int x_coord, y_coord;
     printf("insert x and y coordinates: ");
-    scanf("%d %d", &x_coord, &y_coord);
-    grid[y_coord][x_coord] = marker;
+    while (1) {
+        int x_coord, y_coord;
+        scanf("%d %d", &x_coord, &y_coord);
+        if (grid[x_coord - 1][y_coord - 1] == 'X' || grid[x_coord - 1][y_coord - 1] == 'O') {
+            printf("There is a character already there; try again:");
+            continue;
+        }
+        grid[x_coord - 1][y_coord - 1] = marker;
+        break;
+    }
 }
-/*
-def cpu_move_best(markmove):
-    global row
-    global col
-    for row in range(3):
-        for col in range(3):
-            if grid[row][col] == '.':
-                grid[row][col] = markmove
-                if check(markmove):
-                    grid[row][col] = '.'
-                    return row, col
-                grid[row][col] = '.'
-    return None
-*/
+
 void cpu_move() {
     while (1) {
         int x_rand = rand() % (2 - 0 + 1);
         int y_rand = rand() % (2 - 0 + 1);
-        if (grid[x_rand][y_rand] == "X" || grid[x_rand][y_rand] == "O") {
+        if (grid[x_rand][y_rand] == 'X' || grid[x_rand][y_rand] == 'O') {
             continue;
         }
         grid[x_rand][y_rand] = cpumarker;
+        break;
     }
 }
-/*
-def cpu_move():
-    move = cpu_move_best(cpumarker)
-    if move is not None:
-        grid[row][col] = cpumarker
-        return grid
-    move = cpu_move_best(marker)
-    if move is not None:
-        grid[row][col] = cp
-         cpumarker
-        return grid
-    cpu_move_random()
-*/
+
 void print_table() {
     int i, j;
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
-            printf("%c\n", grid[i][j]);
+            printf("%c ", grid[i][j]);
         }
         printf("\n");
     }
@@ -71,18 +56,21 @@ bool check(char mark) {
             return true;
         }
     }
-    for (i = 0, i < 3; i++) {
+    for (i = 0, i < 3; i++;) {
         if (grid[0][i] == mark && grid[1][i] == mark && grid[2][i] == mark) {
             return true;
         }
     }
     return false;
+}
 
 char choose() {
     while (1) {
         printf("choose a character: ");
-        scanf("%c" &marker);
-        if (marker == "X" || marker == "O") {
+        scanf("%c", &marker);
+        marker = toupper(marker);
+        if (marker == 'X' || marker == 'O') {
+            system("clear");
             return marker;
         }
         printf("try again; \n");
@@ -90,7 +78,7 @@ char choose() {
 }
 
 bool play_turn() {
-    if (marker == "X") {
+    if (marker == 'X') {
         player_move();
         game_over = check(marker);
         x = x + 1;
@@ -98,22 +86,25 @@ bool play_turn() {
             return true;
         }
         if (game_over == true) {
+            system("clear");
             print_table();
             return true;
         }
         cpumarker = 'O';
         marker = 'O';
         cpu_move();
+        system("clear");
         print_table();
         game_over = check(cpumarker);
-        if game_over == true:;
+        if (game_over == true) {
             return true;
+        }
         marker = 'X';
     }
     else if (marker == 'O') {
-        cpumarker = "X";
+        cpumarker = 'X';
         cpu_move();
-        clear_screen();
+        system("clear");
         print_table();
         game_over = check(cpumarker);
         if (game_over == true) {
@@ -127,7 +118,7 @@ bool play_turn() {
             return true;
         }
         if (game_over == true) {
-            clear_screen();
+            system("clear");
             print_table();
             return true;
         }
@@ -137,7 +128,7 @@ bool play_turn() {
 
 void print_result() {
     if (game_over == true) {
-        printf("%c won!", marker);
+        printf("%c won! \n", marker);
         return;
     }
     printf("Draw :( \n");
@@ -146,7 +137,7 @@ void print_result() {
 void play_game() {
     choose();
     x = 0;
-    grid = { {".", ".", "."}, {".", ".", "."}, {".", ".", "."} };
+    char grid[3][3] = { {'.', '.', '.'}, {'.', '.', '.'}, {'.', '.', '.'} };
     while (1) {
         game_over_1 = play_turn();
         if (game_over_1 == true) {
@@ -155,14 +146,14 @@ void play_game() {
     }
 }
 
- int main() {
-    char input = "n";
+int main() {
+    char input;
     while (1) {
         play_game();
         print_result();
         printf("Do you want to play another game? [y/N] ");
-        scanf("%c", input);
-        if (input != "y") {
+        scanf("%c", &input);
+        if (input != 'y') {
             break;
         }
     }
