@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <time.h>
 
 bool game_over = false, game_over_1 = false;
 int x = 0;
@@ -24,10 +25,26 @@ void player_move() {
     }
 }
 
-void cpu_move() {
+int random_number(int min_num, int max_num) {
+    int result = 0, low_num = 0, hi_num = 0;
+
+    if (min_num < max_num) {
+        low_num = min_num;
+        hi_num = max_num + 1; // include max_num in output
+    }
+    else {
+        low_num = max_num + 1; // include max_num in output
+        hi_num = min_num;
+    }
+    srand(time(NULL));
+    result = (rand() % (hi_num - low_num)) + low_num;
+    return result;
+}
+
+void cpu_move_random() {
     while (1) {
-        int x_rand = rand() % (2 - 0 + 1);
-        int y_rand = rand() % (2 - 0 + 1);
+        int x_rand = random_number(0, 2);
+        int y_rand = random_number(0, 2);
         if (grid[x_rand][y_rand] == 'X' || grid[x_rand][y_rand] == 'O') {
             continue;
         }
@@ -62,6 +79,39 @@ bool check(char mark) {
         }
     }
     return false;
+}
+
+int cpu_move_best(char markmove) {
+    int row;
+    int col;
+    for (row = 0; row < 3; row++) {
+        for (col = 0; col < 3; col++) {
+            if (grid[row][col] == '.') {
+                grid[row][col] = markmove;
+                if (check(markmove) == true) {
+                    grid[row][col] = '.';
+                    return row, col;
+                }
+                grid[row][col] = '.';
+            }
+        }
+    }
+    return row = 4;
+}
+
+void cpu_move() {
+    int move;
+    int row;
+    int col;
+    move = cpu_move_best(cpumarker);
+    if (move != 4) {
+        grid[row][col] = cpumarker;
+    }
+    move = cpu_move_best(marker);
+    if (move != 4) {
+        grid[row][col] = cpumarker;
+    }
+    cpu_move_random();
 }
 
 char choose() {
@@ -153,8 +203,9 @@ int main() {
         print_result();
         printf("Do you want to play another game? [y/N] ");
         scanf(" %c", &input);
-        if (input != 'y') {
+        if (input != 'y' || input == ' ') {
             break;
+
         }
     }
     return 0;
