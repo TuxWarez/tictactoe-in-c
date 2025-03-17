@@ -186,8 +186,13 @@ void print_result() {
 
 void play_game() {
     choose();
+    int i, j;
     x = 0;
-    char grid[3][3] = { {'.', '.', '.'}, {'.', '.', '.'}, {'.', '.', '.'} };
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            grid[i][j] = '.';
+        }
+    }
     while (1) {
         game_over_1 = play_turn();
         if (game_over_1 == true) {
